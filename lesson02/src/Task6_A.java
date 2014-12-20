@@ -8,6 +8,6 @@ public class Task6_A {
         System.out.println("Введите n");
         int n = new Scanner(System.in).nextInt();
         int result = n == 0 ? 1 : 2 << n - 1;
-        System.out.println("2^" + n + "=" + result);
+        System.out.printf("2^%d=%s", n, Integer.toBinaryString(result));
     }
 }
