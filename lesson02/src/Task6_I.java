@@ -7,6 +7,6 @@ import java.util.Scanner;
 public class Task6_I {
     public static void main(String[] args) {
         byte b = new Scanner(System.in).nextByte();
-        System.out.print(Integer.toBinaryString(b));
+        System.out.println(Integer.toBinaryString((b << 24) >>> 24));
     }
 }
