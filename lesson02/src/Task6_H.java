@@ -10,8 +10,8 @@ public class Task6_H {
         int a = sc.nextInt();
         int i = sc.nextInt();
         System.out.println(Integer.toBinaryString(a)); //Binary form of given number
-        System.out.println(Integer.toBinaryString((a << (32 - i)) >>> (31))); // option 1: with left and unsigned right shifts
-        System.out.println(Integer.toBinaryString((a & powerOfTwo(i - 1)) >> (i - 1))); // option 2: using AND with mask
+        System.out.println((a << (32 - i)) >>> (31)); // option 1: with left and unsigned right shifts
+        System.out.println((a & powerOfTwo(i - 1)) >> (i - 1)); // option 2: using AND with mask
 
     }
 
