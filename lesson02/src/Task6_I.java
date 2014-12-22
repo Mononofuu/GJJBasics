@@ -7,6 +7,10 @@ import java.util.Scanner;
 public class Task6_I {
     public static void main(String[] args) {
         byte number = new Scanner(System.in).nextByte();
-        System.out.println(Integer.toBinaryString((number << 24) >>> 24));
+        StringBuffer str = new StringBuffer();
+        do {
+            str.append(number%2);
+        }while ((number/=2)>=1);
+        System.out.println(str.reverse());
     }
 }
