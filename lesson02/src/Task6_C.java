@@ -9,6 +9,6 @@ public class Task6_C {
         Scanner sc = new Scanner(System.in);
         int a = sc.nextInt();
         int i = sc.nextInt();
-        System.out.println(Integer.toBinaryString((a << i) >>> i));
+        System.out.println(Integer.toBinaryString((a >>> i) << i));
     }
 }
