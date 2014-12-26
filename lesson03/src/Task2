@@ -6,18 +6,16 @@
 
 
 1) byte b = 100
-    будет, т.к 100 находится в пределах допустимых значений для типа byte -128..127
+    will be compiled, because 100 is in the range of valid values for byte -128..127
 
 2) byte b = 100L
-    не будет, т.к мы пытаемся присвоить к переменной типа byte литерал бОльшего типа long.
-    Что бы строчка скомпилировалась, необходимо выполнить narrowing conversion.
+    compilation error - assigning long type literal to smaller type byte
+    Narrowing conversion is needed:
     byte b = (byte) 100L
-    Потерь в данном случае не будет, т.к 100 попадает в диапазон значений byte -128..127
 
 3) int i = 100L
-    не будет, т.к мы пытаемся присвоить к переменной типа int литерал бОльшего типа long.
-    Что бы строчка скомпилировалась, необходимо выполнить narrowing conversion.
+    compilation error - assigning long type literal to smaller type int
+    Narrowing conversion is needed:
     int i = (int) 100L
-    Потерь в данном случае не будет, т.к 100 попадает в диапазон значений int -2,147,483,648..2,147,483,647
-    Так же можно записать так:
+    or
     int i = (byte) 100L

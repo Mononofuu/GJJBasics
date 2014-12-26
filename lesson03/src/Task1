@@ -1,6 +1,6 @@
 сделать вывод, как происходит расширение типов в бОльший размер в случае положительных и отрицательных чисел.
 
-Расширение происходит в следующих порядках:
+Java type casting rules:
 byte to short, int, long, float, or double
 short to int, long, float, or double
 char to int, long, float, or double
@@ -8,4 +8,4 @@ int to long, float, or double
 long to float or double
 float to double
 
-возможны потери при расширении Int во float или long во double - из-за потери точности.
+possible losses during conversion from int to float or from long to double - due to loss of accuracy.

@@ -4,7 +4,12 @@
 
 (int)(char)(byte)-1 = (int)(char)-1 = (int)65535 = 65535
 
-Объясняется это тем, что char не имеет знака и его диапазон значений 0..65535.
-В нашем случае, при превышении диапазона на -1 мы получаем 65535
+Explained by the fact that char is unsigned type and its value range is 0..65535.
+In this case, when the range is exceeded to -1 we obtain 65535
+
+
+11111111 11111111 11111111 11111111 int -1
+                  11111111 11111111 char 65535
+00000000 00000000 11111111 11111111 int 65535
 
 
