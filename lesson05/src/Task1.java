@@ -1,7 +1,9 @@
 public class Task1 {
     public static void main(String[] args) {
-        if (args.length > 0) {
-            System.out.printf("Привет, %s!", args[0]);
-        }
+        Assert.assertEquals("Привет, Иван!", getResult("Иван"));
+    }
+
+    private static String getResult(String name) {
+        return ("Привет, " + name + "!");
     }
 }

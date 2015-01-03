@@ -1,8 +1,9 @@
 public class Task9_24 {
     public static void main(String[] args) {
-        String apple = "яблоко";
-        String bloc = apple.substring(1, 5);
-        String oko = apple.substring(3);
-        System.out.println(bloc + "\n" + oko);
+        Assert.assertEquals("блок око", getResult("яблоко"));
+    }
+
+    private static String getResult(String word) {
+        return word.substring(1, 5) + " " + word.substring(3);
     }
 }

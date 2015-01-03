@@ -1,7 +1,13 @@
 public class Task9_15 {
     public static void main(String[] args) {
-        if (args.length == 2) {
-            System.out.println(args[0].charAt(Integer.parseInt(args[1])));
-        }
+        Assert.assertEquals("p", getResult("Apple", 1));
+        Assert.assertEquals(" ", getResult("Apple Pie", 5));
+        Assert.assertEquals("e", getResult("Apple", 4));
     }
+
+    private static String getResult(String word, int i) {
+        return word.charAt(i) + "";
+    }
+
+
 }
