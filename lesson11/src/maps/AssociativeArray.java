@@ -4,33 +4,28 @@ import java.util.LinkedList;
 
 public class AssociativeArray implements Mappable {
     LinkedList[] buckets;
-    int arrayLength = 16;
-    int threshhold = arrayLength / 8;
     int size = 0;
 
-
     public AssociativeArray() {
-        this.buckets = new LinkedList[arrayLength];
-        for (int i = 0; i < arrayLength; i++) {
+        buckets = new LinkedList[16];
+        for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new LinkedList();
         }
     }
 
     private void reindex() {
-        LinkedList[] newBuckets = new LinkedList[arrayLength * 2];
+        LinkedList[] newBuckets = new LinkedList[buckets.length * 2];
         for (int i = 0; i < newBuckets.length; i++) {
             newBuckets[i] = new LinkedList();
         }
-        arrayLength *= 2;
-        for (LinkedList<Node> list : buckets) {
+        LinkedList[] tempBuckets = buckets;
+        buckets = newBuckets;
+        for (LinkedList<Node> list : tempBuckets) {
             for (Node node : list) {
-                newBuckets[position(node.getKey())].add(node);
+                buckets[position(node.getKey())].add(node);
             }
         }
-        buckets = newBuckets;
-
     }
-
 
     @Override
     public String add(String key, String val) {
@@ -38,18 +33,15 @@ public class AssociativeArray implements Mappable {
             return null;
         }
         LinkedList<Node> bucket = buckets[position(key)];
-
-        for (Node node : bucket) {
-            if (!node.getKey().equals(key)) {
-                continue;
-            }
-            String existingValue = node.getValue();
-            node.setValue(val);
+        Node findedNode = findNode(bucket, key);
+        if (findedNode != null) {
+            String existingValue = findedNode.getValue();
+            findedNode.setValue(val);
             return existingValue;
         }
         bucket.add(new Node(key, val));
         size++;
-        if (size > threshhold * arrayLength) {
+        if (size > buckets.length * 2) {
             reindex();
         }
         return null;
@@ -59,7 +51,7 @@ public class AssociativeArray implements Mappable {
         if (key == null) {
             return 0;
         }
-        return Math.abs(key.hashCode() % arrayLength);
+        return Math.abs(key.hashCode() % buckets.length);
     }
 
     @Override
@@ -68,12 +60,21 @@ public class AssociativeArray implements Mappable {
             return null;
         }
         LinkedList<Node> bucket = buckets[position(key)];
+        Node findedNode = findNode(bucket, key);
+        return findedNode == null ? null : findedNode.getValue();
+    }
+
+    private Node findNode(LinkedList<Node> bucket, String key) {
+        if (bucket == null || key == null) {
+            return null;
+        }
+        Node findedNode = null;
         for (Node node : bucket) {
-            if (node.getKey().equals(key)) {
-                return node.getValue();
+            if (node.getKey().equals(key) && node.getKey() != null) {
+                findedNode = node;
             }
         }
-        return null;
+        return findedNode;
     }
 
     @Override
@@ -82,15 +83,14 @@ public class AssociativeArray implements Mappable {
             return null;
         }
         LinkedList<Node> bucket = buckets[position(key)];
-        for (Node node : bucket) {
-            if (node.getKey().equals(key)) {
-                String deletedValue = node.getValue();
-                bucket.remove(node);
-                size--;
-                return deletedValue;
-            }
+        String deletedValue = null;
+        Node findedNode = findNode(bucket, key);
+        if (findedNode != null) {
+            deletedValue = findedNode.getValue();
+            bucket.remove(findedNode);
+            size--;
         }
-        return null;
+        return deletedValue;
     }
 
     class Node {
@@ -129,5 +129,4 @@ public class AssociativeArray implements Mappable {
             this.value = value;
         }
     }
-
 }
