@@ -79,7 +79,7 @@ public class DoublyLinkedList {
         }
     }
 
-    public Element remove(int value) {
+    public int remove(int value) {
         Element current = getFisrt();
         while (current != null) {
             if (current.getValue() == value) {
@@ -99,10 +99,10 @@ public class DoublyLinkedList {
                 current = current.getNext();
             }
         }
-        return current;
+        return current.getValue();
     }
 
-    public int indexOf(int value) {
+    private int indexOf(int value) {
         Element current = getFisrt();
 
         if (getFisrt().getValue() == value) {
@@ -127,20 +127,13 @@ public class DoublyLinkedList {
         return false;
     }
 
-    public DoublyLinkedList() {
-    }
-
-    public void setFisrt(Element fisrt) {
-        this.fisrt = fisrt;
-    }
-
-    public void setLast(Element last) {
-        this.last = last;
-    }
-
     public Element getFisrt() {
 
         return fisrt;
+    }
+
+    private void setFisrt(Element fisrt) {
+        this.fisrt = fisrt;
     }
 
     public int getSize() {
@@ -150,40 +143,45 @@ public class DoublyLinkedList {
     public Element getLast() {
         return last;
     }
-}
 
-class Element {
-    Element next;
-    Element prev;
-
-    int value;
-
-    public Element getNext() {
-        return next;
+    private void setLast(Element last) {
+        this.last = last;
     }
 
-    public void setNext(Element next) {
-        this.next = next;
+    private class Element {
+        private Element next;
+        private Element prev;
+
+        private int value;
+
+        public Element(int value) {
+            this.value = value;
+
+        }
+
+        public Element getNext() {
+            return next;
+        }
+
+        public void setNext(Element next) {
+            this.next = next;
+        }
+
+        public Element getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Element prev) {
+            this.prev = prev;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
     }
 
-    public Element getPrev() {
-        return prev;
-    }
-
-    public void setPrev(Element prev) {
-        this.prev = prev;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public Element(int value) {
-        this.value = value;
-
-    }
 }
