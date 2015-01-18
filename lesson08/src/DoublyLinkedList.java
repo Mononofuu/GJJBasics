@@ -1,10 +1,10 @@
 public class DoublyLinkedList {
     private int size;
-    private Element fisrt;
+    private Element first;
     private Element last;
 
     public void printList() {
-        Element current = getFisrt();
+        Element current = getFirst();
         for (int i = 0; i < size; i++) {
             System.out.print(current.getValue());
             current = current.getNext();
@@ -15,12 +15,12 @@ public class DoublyLinkedList {
     public void addFirst(int value) {
         Element element = new Element(value);
         if (size == 0) {
-            setFisrt(element);
+            setFirst(element);
             setLast(element);
         } else {
-            getFisrt().setPrev(element);
-            element.setNext(getFisrt());
-            setFisrt(element);
+            getFirst().setPrev(element);
+            element.setNext(getFirst());
+            setFirst(element);
         }
         size++;
     }
@@ -28,7 +28,7 @@ public class DoublyLinkedList {
     public void addLast(int value) {
         Element element = new Element(value);
         if (size == 0) {
-            setFisrt(element);
+            setFirst(element);
             setLast(element);
         } else {
             getLast().setNext(element);
@@ -43,11 +43,11 @@ public class DoublyLinkedList {
     }
 
     public Element get(int index) {
-        Element current = getFisrt();
+        Element current = getFirst();
         if (index > size) {
             System.out.println("Index out of bounds");
         } else if (index == 0) {
-            return getFisrt();
+            return getFirst();
         } else if (index == size) {
             return getLast();
         } else {
@@ -67,7 +67,7 @@ public class DoublyLinkedList {
             addLast(value);
         } else {
             Element element = new Element(value);
-            Element current = getFisrt();
+            Element current = getFirst();
             for (int i = 0; i < index; i++) {
                 current = current.getNext();
             }
@@ -79,12 +79,12 @@ public class DoublyLinkedList {
         }
     }
 
-    public int remove(int value) {
-        Element current = getFisrt();
+    public Element remove(int value) {
+        Element current = getFirst();
         while (current != null) {
             if (current.getValue() == value) {
-                if (current == getFisrt()) {
-                    setFisrt(current.getNext());
+                if (current == getFirst()) {
+                    setFirst(current.getNext());
                     current.getNext().setPrev(null);
                 } else if (current == getLast()) {
                     setLast(current.getPrev());
@@ -99,18 +99,18 @@ public class DoublyLinkedList {
                 current = current.getNext();
             }
         }
-        return current.getValue();
+        return current;
     }
 
-    private int indexOf(int value) {
-        Element current = getFisrt();
+    public int indexOf(int value) {
+        Element current = getFirst();
 
-        if (getFisrt().getValue() == value) {
+        if (getFirst().getValue() == value) {
             return 0;
         } else if (getLast().getValue() == value) {
-            return size;
+            return size - 1;
         } else {
-            for (int i = 0; i < size; i++) {
+            for (int i = 1; i < size - 1; i++) {
                 if (current.getValue() == value) return i;
                 current = current.getNext();
             }
@@ -119,7 +119,7 @@ public class DoublyLinkedList {
     }
 
     public boolean contains(int value) {
-        Element current = getFisrt();
+        Element current = getFirst();
         for (int i = 0; i < size; i++) {
             if (current.getValue() == value) return true;
             current = current.getNext();
@@ -127,13 +127,13 @@ public class DoublyLinkedList {
         return false;
     }
 
-    public Element getFisrt() {
+    public Element getFirst() {
 
-        return fisrt;
+        return first;
     }
 
-    private void setFisrt(Element fisrt) {
-        this.fisrt = fisrt;
+    private void setFirst(Element first) {
+        this.first = first;
     }
 
     public int getSize() {
