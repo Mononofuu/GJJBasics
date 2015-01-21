@@ -1,12 +1,14 @@
-public class DoublyLinkedList {
-    private int size;
+package lists;
+
+public class DoublyLinkedList implements SimpleList {
+    private int size=0;
     private Element first;
     private Element last;
 
     public void printList() {
         Element current = getFirst();
         for (int i = 0; i < size; i++) {
-            System.out.print(current.getValue());
+            System.out.print(current.getValue() + " ");
             current = current.getNext();
         }
         System.out.println();
@@ -25,24 +27,35 @@ public class DoublyLinkedList {
         size++;
     }
 
-    public void addLast(int value) {
+    public int add(int value) {
         Element element = new Element(value);
         if (size == 0) {
             setFirst(element);
             setLast(element);
+            size++;
+            return 0;
         } else {
             getLast().setNext(element);
             element.setPrev(getLast());
             setLast(element);
         }
         size++;
+        return size-1;
     }
 
-    public void set(int index, int value) {
-        get(index).setValue(value);
+    public int set(int index, int value) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        int deleted = getElement(index).getValue();
+        getElement(index).setValue(value);
+        return deleted;
     }
 
-    public Element get(int index) {
+    public Element getElement(int index) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
         Element current = getFirst();
         if (index > size) {
             System.out.println("Index out of bounds");
@@ -59,12 +72,15 @@ public class DoublyLinkedList {
     }
 
     public void add(int index, int value) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
         if (index > size) {
             System.out.println("Index out of bounds");
         } else if (index == 0) {
             addFirst(value);
         } else if (index == size) {
-            addLast(value);
+            add(value);
         } else {
             Element element = new Element(value);
             Element current = getFirst();
@@ -79,37 +95,49 @@ public class DoublyLinkedList {
         }
     }
 
-    public Element remove(int value) {
-        Element current = getFirst();
-        while (current != null) {
-            if (current.getValue() == value) {
-                if (current == getFirst()) {
-                    setFirst(current.getNext());
-                    current.getNext().setPrev(null);
-                } else if (current == getLast()) {
-                    setLast(current.getPrev());
-                    current.getPrev().setNext(null);
-                } else {
-                    current.getPrev().setNext(current.getNext());
-                    current.getNext().setPrev(current.getPrev());
-                }
-                size--;
-                break;
-            } else {
-                current = current.getNext();
-            }
+    @Override
+    public int get(int index) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
         }
-        return current;
+        return getElement(index).getValue();
     }
 
-    public int indexOf(int value) {
-        Element current = getFirst();
+    public int remove(int index) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        Element current = getElement(index);
+        if (current == getFirst()) {
+            setFirst(current.getNext());
+            current.getNext().setPrev(null);
+        } else if (current == getLast()) {
+            setLast(current.getPrev());
+            current.getPrev().setNext(null);
+        } else {
+            current.getPrev().setNext(current.getNext());
+            current.getNext().setPrev(current.getPrev());
+        }
+        size--;
+        return current.getValue();
+    }
 
-        if (getFirst().getValue() == value) {
+    public int removeElement(int value) {
+        int deletedIndex = indexOf(value);
+        remove(deletedIndex);
+        return deletedIndex;
+    }
+
+
+    public int indexOf(int value) {
+        Element current = first;
+
+        if (first.getValue() == value) {
             return 0;
-        } else if (getLast().getValue() == value) {
+        } else if (last.getValue() == value) {
             return size - 1;
         } else {
+            current = current.getNext();
             for (int i = 1; i < size - 1; i++) {
                 if (current.getValue() == value) return i;
                 current = current.getNext();
@@ -136,7 +164,7 @@ public class DoublyLinkedList {
         this.first = first;
     }
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 

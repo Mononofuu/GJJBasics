@@ -1,11 +1,10 @@
+package lists;
+
 public class DynamicArray {
+    
     int[] array;
 
     private int size;
-
-    public int getSize() {
-        return size;
-    }
 
     public DynamicArray() {
         array = new int[10];
@@ -15,11 +14,23 @@ public class DynamicArray {
         array = new int[size];
     }
 
-    public void set(int index, int value) {
+    public int size() {
+        return size;
+    }
+
+    public int set(int index, int value) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        int deletedValue = array[index];
         array[index] = value;
+        return deletedValue;
     }
 
     public int get(int index) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
         return array[index];
     }
 
@@ -38,6 +49,9 @@ public class DynamicArray {
     }
 
     public void add(int index, int value) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
         if (size == array.length) {
             int[] temp = new int[size * 2];
             System.arraycopy(array, 0, temp, 0, size);
@@ -53,8 +67,11 @@ public class DynamicArray {
     }
 
     public int remove(int index) {
+        if (index<0 || index>size-2){
+            throw new ArrayIndexOutOfBoundsException();
+        }
         int deletedValue = get(index);
-        System.arraycopy(array, index + 1, array, index, size - index);
+        System.arraycopy(array, index + 1, array, index, size - index -1);
         size--;
         if (size < array.length / 2) {
             int[] temp = new int[array.length / 2];
