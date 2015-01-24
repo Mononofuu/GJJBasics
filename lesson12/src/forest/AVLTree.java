@@ -7,13 +7,10 @@ public class AVLTree implements Treeish {
     Node root;
 
     public void scan() {
-        root.scan();
-    }
-
-    public void makeBalance() {
-
-        root.rotateRight((Node) root.getLeft());
-        updateAllHeights();
+        if (root != null) {
+            root.scan();
+            root.scan();
+        }
     }
 
     /**
@@ -53,9 +50,6 @@ public class AVLTree implements Treeish {
             }
             updateAllHeights();
             scan();
-
-        } else {
-
         }
     }
 
@@ -65,17 +59,48 @@ public class AVLTree implements Treeish {
      * @param value to delete. Can be null.
      */
     @Override
-    //TODO: remove
     public void remove(Integer value) {
         ValueContainer toDel = findValue(value, getTop());
         if (toDel == null) {
             return;
         }
         ValueContainer newNode = findMin(toDel);
-        if (root == toDel) {
-            root = (Node) newNode;
-            newNode.setLeft(toDel.getLeft());
-            newNode.setRight(toDel.getRight());
+
+        if (newNode == toDel & toDel == root) {
+            if (toDel.getLeft() == null && toDel.getRight() == null) {
+                root = null;
+            } else {
+                root = toDel.getRight() == null ? null : (Node) toDel.getRight();
+                if (root!=null){
+                    root.setParent(null);
+                }
+                toDel.setRight(null);
+            }
+        } else if (newNode == toDel & toDel != root) {
+            if (toDel.isLeft()) {
+                if (toDel.getRight() == null) {
+                    toDel.getParent().setLeft(null);
+                } else {
+                    toDel.getParent().setLeft(toDel.getRight());
+                    toDel.getParent().getLeft().setParent(toDel.getParent());
+                }
+                toDel.setParent(null);
+                toDel.setRight(null);
+            } else {
+                toDel.getParent().setRight(toDel.getRight() == null ? null : toDel.getRight());
+                if (toDel.getParent().getRight() != null) {
+                    toDel.getParent().getRight().setParent(toDel.getParent());
+                }
+                toDel.setParent(null);
+                toDel.setRight(null);
+            }
+        } else if (toDel == root) {
+            root = (Node) toDel.getLeft();
+            root.setRight(toDel.getRight());
+            toDel.getRight().setParent(root);
+            root.setParent(null);
+            toDel.setLeft(null);
+            toDel.setRight(null);
         } else {
             if (toDel.isLeft()) {
                 toDel.getParent().setLeft(newNode);
@@ -85,17 +110,9 @@ public class AVLTree implements Treeish {
                 newNode.setParent(toDel.getParent());
             }
         }
-        if (toDel == newNode) {
-            if (toDel.isLeft()) {
-                toDel.getParent().setLeft(null);
-            } else {
-                toDel.getParent().setRight(null);
-            }
-        }
         updateAllHeights();
         scan();
         updateAllHeights();
-
     }
 
 
@@ -105,7 +122,9 @@ public class AVLTree implements Treeish {
      */
     @Override
     public boolean contains(Integer value) {
-        return false;
+        ValueContainer findedNode = findValue(value, root);
+
+        return findedNode != null && value == findedNode.getValue();
     }
 
     /**
@@ -121,7 +140,11 @@ public class AVLTree implements Treeish {
      */
     @Override
     public List<ValueContainer> asList() {
-        return getTop().asList();
+        if (root != null) {
+            return getTop().asList();
+        } else {
+            return new LinkedList<>();
+        }
     }
 
     /**
@@ -129,7 +152,9 @@ public class AVLTree implements Treeish {
      */
     @Override
     public void updateAllHeights() {
-        getTop().updateHeights();
+        if (this.root != null) {
+            getTop().updateHeights();
+        }
     }
 
     public ValueContainer findValue(Integer value, ValueContainer node) {
@@ -272,7 +297,6 @@ public class AVLTree implements Treeish {
                     rotateRight(this);
                     updateHeights();
                 }
-//                System.out.println(this.getValue());
                 updateHeights();
             } else if ((getLeftHeight() - getRightHeight()) < -1) {
                 if ((this.getRight().getRightHeight() - this.getRight().getLeftHeight()) > 1) {
@@ -286,13 +310,9 @@ public class AVLTree implements Treeish {
                     rotateLeft(this);
                     updateHeights();
                 }
-                System.out.println(this.getValue());
                 updateHeights();
             }
             updateHeights();
-
-
-//            updateHeights();
             if (getLeft() != null) {
                 left.scan();
             }
@@ -309,8 +329,13 @@ public class AVLTree implements Treeish {
                 root = B;
                 B.setParent(null);
             } else {
-                A.getParent().setRight(B);
-                B.setParent(A.getParent());
+                if (A.isLeft()) {
+                    A.getParent().setLeft(B);
+                    B.setParent(A.getParent());
+                } else {
+                    A.getParent().setRight(B);
+                    B.setParent(A.getParent());
+                }
             }
             if (B.getLeft() != null) {
                 A.setRight(B.getLeft());
@@ -328,10 +353,13 @@ public class AVLTree implements Treeish {
                 root = B;
                 B.setParent(null);
             } else {
-                //TODO:
-//                A.getParent().setLeft(B);
-                A.getParent().setRight(B);
-                B.setParent(A.getParent());
+                if (A.isLeft()) {
+                    A.getParent().setLeft(B);
+                    B.setParent(A.getParent());
+                } else {
+                    A.getParent().setRight(B);
+                    B.setParent(A.getParent());
+                }
             }
             if (B.getRight() != null) {
                 A.setLeft(B.getRight());

@@ -21,7 +21,7 @@ public class AVLTreeTest {
 
     @Test(timeout = 2000)
     public void testBigTree() {
-        processTest(getConsecutiveNumbers(1000000), false);
+        processTest(getConsecutiveNumbers(1000), false);
     }
 
     private int[] getConsecutiveNumbers(int size) {
