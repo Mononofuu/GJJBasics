@@ -1,12 +1,12 @@
 public class Task10_47 {
     public static void main(String[] args) {
-        Assert.assertEquals(2, getFibonacchi(3));
-        Assert.assertEquals(34, getFibonacchi(9));
-        Assert.assertEquals(1, getFibonacchi(2));
+        Assert.assertEquals(2, getFibonacci(3));
+        Assert.assertEquals(34, getFibonacci(9));
+        Assert.assertEquals(1, getFibonacci(2));
     }
 
-    static int getFibonacchi(int k) {
+    static int getFibonacci(int k) {
         if (k == 1 || k == 2) return 1;
-        return getFibonacchi(k - 1) + getFibonacchi(k - 2);
+        return getFibonacci(k - 1) + getFibonacci(k - 2);
     }
 }
