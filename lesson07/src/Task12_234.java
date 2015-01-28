@@ -2,6 +2,8 @@ public class Task12_234 {
     public static void main(String[] args) {
         remLine(getArray(), 2);
         remColumn(getArray(), 2);
+        remLineZero(getArray(), 2);
+        remColumnZero(getArray(), 2);
 
     }
 
@@ -14,15 +16,7 @@ public class Task12_234 {
                 count++;
             }
         }
-
-        for (int[] array : simpleArray) {
-            for (int i : array) {
-                System.out.print(i + "  ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-
+        printArray(simpleArray);
         return simpleArray;
     }
 
@@ -37,14 +31,14 @@ public class Task12_234 {
                 }
             }
         }
+        printArray(newArray);
+    }
 
-        for (int[] arr : newArray) {
-            for (int i : arr) {
-                System.out.print(i + "  ");
-            }
-            System.out.println();
+    static void remLineZero(int[][] array, int k) {
+        for (int i = 0; i < array.length; i++) {
+                array[k][i] = 0;
         }
-        System.out.println();
+        printArray(array);
     }
 
     static void remColumn(int[][] array, int s) {
@@ -58,9 +52,19 @@ public class Task12_234 {
                 }
             }
         }
+        printArray(newArray);
+    }
 
-        for (int[] arr : newArray) {
-            for (int i : arr) {
+    static void remColumnZero(int[][] array, int k) {
+        for (int i = 0; i < array.length; i++) {
+            array[i][k] = 0;
+        }
+        printArray(array);
+    }
+
+    private static void printArray(int[][] mArray){
+        for (int[] array : mArray) {
+            for (int i : array) {
                 System.out.print(i + "  ");
             }
             System.out.println();

@@ -1,4 +1,6 @@
 public class Task12_23 {
+    final static int SIZE = 7;
+
     public static void main(String[] args) {
         printArrayA();
         printArrayB();
@@ -6,58 +8,41 @@ public class Task12_23 {
     }
 
     static void printArrayA() {
-        int[][] arrayA = new int[7][7];
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
-                arrayA[i][i] = 1;
-                arrayA[i][6 - i] = 1;
-            }
+        int[][] arrayA = new int[SIZE][SIZE];
+        for (int i = 0; i<SIZE; i++){
+            arrayA[i][i] = 1;
+            arrayA[i][SIZE - 1 - i] = 1;
         }
-
-        for (int[] array : arrayA) {
-            for (int i : array) {
-                System.out.print(i);
-            }
-            System.out.println();
-        }
-        System.out.println();
+        printArray(arrayA);
     }
 
     static void printArrayB() {
-        int[][] arrayB = new int[7][7];
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
-                arrayB[i][i] = 1;
-                arrayB[i][6 - i] = 1;
-                arrayB[i][3] = 1;
-                arrayB[3][j] = 1;
+        int[][] arrayB = new int[7][SIZE];
+        for (int i = 0; i<SIZE; i++){
+            arrayB[i][i] = 1;
+            arrayB[i][SIZE/2] = 1;
+            arrayB[SIZE/2][i] = 1;
+            arrayB[i][SIZE - 1 - i] = 1;
 
-            }
         }
-
-        for (int[] array : arrayB) {
-            for (int i : array) {
-                System.out.print(i);
-            }
-            System.out.println();
-        }
-        System.out.println();
+        printArray(arrayB);
     }
 
     static void printArrayC() {
-        int[][] arrayC = new int[7][7];
-        for (int i = 0; i < 4; i++) {
-            for (int j = i; j < 7 - i; j++) {
-                arrayC[i][j] = 1;
+        int[][] arrayC = new int[SIZE][SIZE];
+        for (int i = 0; i<SIZE; i++){
+            arrayC[i][i] = 1;
+            arrayC[i][SIZE - 1 - i] = 1;
+            for (int j = i; j<SIZE-i; j++){
+                arrayC[i][j]=1;
+                arrayC[SIZE - 1 - i][j]=1;
             }
         }
-        for (int i = 4; i < 7; i++) {
-            for (int j = 7 - i - 1; j <= i; j++) {
-                arrayC[i][j] = 1;
-            }
-        }
+        printArray(arrayC);
+    }
 
-        for (int[] array : arrayC) {
+    private static void printArray(int[][] mArray){
+        for (int[] array : mArray) {
             for (int i : array) {
                 System.out.print(i);
             }

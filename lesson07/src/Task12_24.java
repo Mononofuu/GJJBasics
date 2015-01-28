@@ -8,12 +8,11 @@ public class Task12_24 {
         int[][] arrayA = new int[6][6];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
-                arrayA[i][j] = 1;
-                if (i > 0 & j > 0) {
+                if (i * j == 0) {
+                    arrayA[i][j] = 1;
+                } else {
                     arrayA[i][j] = arrayA[i - 1][j] + arrayA[i][j - 1];
-
                 }
-
             }
         }
 

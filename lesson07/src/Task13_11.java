@@ -1,8 +1,8 @@
 public class Task13_11 {
     public static void main(String[] args) {
         Employee[] company = makeCompany();
-        Searcher.findEmployeeByAges(company, 12);
-        Searcher.findEmployeeByName(company, "ИВАН");
+        Employee.findEmployeeByAges(company, 12);
+        Employee.findEmployeeByName(company, "ИВАН");
     }
 
     static Employee[] makeCompany() {
@@ -51,12 +51,29 @@ public class Task13_11 {
             this.joinMonth = joinMonth;
         }
 
-        int getFullAges() {
-            int currentYear = 2015;
-            int currentMonth = 01;
-            return (currentMonth - this.getJoinMonth()) == 0 ? currentYear - this.getJoinYear() + 1 : currentYear - this.getJoinYear();
+        public static void findEmployeeByAges(Employee[] employees, int age) {
+            for (Employee worker : employees) {
+                String workerID = worker.getLastName() + " " + worker.getFirstName() + " " + worker.getMidName();
+                if (worker.getFullAges() >= age) {
+                    System.out.println(workerID + " " + worker.getAddress());
+                }
+            }
         }
 
+        public static void findEmployeeByName(Employee[] employees, String name) {
+            for (Employee worker : employees) {
+                String workerID = worker.getLastName() + " " + worker.getFirstName() + " " + worker.getMidName();
+                if (workerID.toLowerCase().contains(name.toLowerCase())){
+                    System.out.println(workerID + " " + worker.getAddress());
+                }
+            }
+        }
+
+        int getFullAges() {
+            int currentYear = 2015;
+            int currentMonth = 1;
+            return (currentMonth - getJoinMonth()) == 0 ? currentYear - getJoinYear() + 1 : currentYear - getJoinYear();
+        }
 
         public String getLastName() {
             return lastName;
@@ -104,24 +121,6 @@ public class Task13_11 {
 
         public void setJoinMonth(int joinMonth) {
             this.joinMonth = joinMonth;
-        }
-    }
-
-    static class Searcher {
-        static void findEmployeeByAges(Employee[] eployers, int age) {
-            for (Employee worker : eployers) {
-                if (worker.getFullAges() >= age) {
-                    System.out.println(worker.getLastName() + " " + worker.getFirstName() + " " + worker.getMidName() + " " + worker.getAddress());
-                }
-            }
-        }
-
-        static void findEmployeeByName(Employee[] eployers, String name) {
-            for (Employee worker : eployers) {
-                if ((worker.getFirstName() + worker.getMidName() + worker.getLastName()).toLowerCase().contains(name.toLowerCase())) {
-                    System.out.println(worker.getLastName() + " " + worker.getFirstName() + " " + worker.getMidName() + " " + worker.getAddress());
-                }
-            }
         }
     }
 

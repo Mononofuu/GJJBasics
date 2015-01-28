@@ -1,9 +1,7 @@
 public class Task12_63 {
     public static void main(String[] args) {
         schoolClasses();
-
     }
-
 
     static void schoolClasses() {
         int[][] schoolArray = new int[11][4];
@@ -21,16 +19,12 @@ public class Task12_63 {
         }
         System.out.println();
 
-
-        int j = 1;
-        for (int[] array : schoolArray) {
+        for (int i = 0; i < schoolArray.length; i++) {
             int average = 0;
-            for (int i : array) {
-                average += i;
+            for (int j : schoolArray[i]) {
+                average += j;
             }
-            System.out.println(j + " parallel average learners = " + average / 4);
-            j++;
+            System.out.println(i + 1 + " parallel average learners = " + average / 4);
         }
-        System.out.println();
     }
 }
