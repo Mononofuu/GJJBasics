@@ -44,7 +44,7 @@ public class DoublyLinkedList implements SimpleList {
     }
 
     public int set(int index, int value) {
-        if (index<0 || index>size-2){
+        if (index<0 || index>size-1){
             throw new ArrayIndexOutOfBoundsException();
         }
         int deleted = getElement(index).getValue();
@@ -53,7 +53,7 @@ public class DoublyLinkedList implements SimpleList {
     }
 
     public Element getElement(int index) {
-        if (index<0 || index>size-2){
+        if (index<0 || index>size-1){
             throw new ArrayIndexOutOfBoundsException();
         }
         Element current = getFirst();
@@ -72,7 +72,7 @@ public class DoublyLinkedList implements SimpleList {
     }
 
     public void add(int index, int value) {
-        if (index<0 || index>size-2){
+        if (index<0 || index>size-1){
             throw new ArrayIndexOutOfBoundsException();
         }
         if (index > size) {
@@ -97,14 +97,14 @@ public class DoublyLinkedList implements SimpleList {
 
     @Override
     public int get(int index) {
-        if (index<0 || index>size-2){
+        if (index<0 || index>size-1){
             throw new ArrayIndexOutOfBoundsException();
         }
         return getElement(index).getValue();
     }
 
     public int remove(int index) {
-        if (index<0 || index>size-2){
+        if (index<0 || index>size-1){
             throw new ArrayIndexOutOfBoundsException();
         }
         Element current = getElement(index);
