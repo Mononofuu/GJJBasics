@@ -8,10 +8,10 @@ public class Task9_166 {
         String tempWord = words[0];
         words[0] = words[words.length - 1];
         words[words.length - 1] = tempWord;
-        String resultString = "";
+        StringBuilder resultString = new StringBuilder();
         for (String s : words) {
-            resultString += s + " ";
+            resultString.append(s + " ");
         }
-        return resultString.trim();
+        return resultString.toString().trim();
     }
 }

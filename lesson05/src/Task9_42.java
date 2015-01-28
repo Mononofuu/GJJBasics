@@ -5,10 +5,7 @@ public class Task9_42 {
     }
 
     private static String getResult(String word) {
-        StringBuilder string = new StringBuilder();
-        for (int i = word.length() - 1; i >= 0; i--) {
-            string.append(word.charAt(i));
-        }
-        return string.toString();
+        StringBuilder sb = new StringBuilder(word);
+        return sb.reverse().toString();
     }
 }
