@@ -3,13 +3,91 @@ package forest;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AVLTree implements Treeish {
+public class Tree implements Treeish {
     Node root;
 
-    public void scan() {
-        if (root != null) {
-            root.scan();
-            root.scan();
+    public void scan(ValueContainer node) {
+        if (node.getLeft() != null) {
+            scan(node.getLeft());
+        }
+        if (!node.isBalanced()) {
+            getBalance(node);
+        }
+        if (node.getRight() != null) {
+            scan(node.getRight());
+        }
+
+    }
+
+    void rotateRight(Node A) {
+        Node B = (Node) A.getLeft();
+        if (A == root) {
+            root = B;
+            B.setParent(null);
+        } else {
+            if (A.isLeft()) {
+                A.getParent().setLeft(B);
+                B.setParent(A.getParent());
+            } else {
+                A.getParent().setRight(B);
+                B.setParent(A.getParent());
+            }
+        }
+        if (B.getRight() != null) {
+            A.setLeft(B.getRight());
+            A.getLeft().setParent(A);
+        } else {
+            A.setLeft(null);
+        }
+        B.setRight(A);
+        A.setParent(B);
+    }
+
+    void rotateLeft(Node A) {
+        Node B = (Node) A.getRight();
+        if (A == root) {
+            root = B;
+            B.setParent(null);
+        } else {
+            if (A.isLeft()) {
+                A.getParent().setLeft(B);
+                B.setParent(A.getParent());
+            } else {
+                A.getParent().setRight(B);
+                B.setParent(A.getParent());
+            }
+        }
+        if (B.getLeft() != null) {
+            A.setRight(B.getLeft());
+            A.getRight().setParent(A);
+        } else {
+            A.setRight(null);
+        }
+        B.setLeft(A);
+        A.setParent(B);
+    }
+
+    private void getBalance(ValueContainer node) {
+        if ((node.getLeftHeight() - node.getRightHeight()) > 1) {
+            if ((node.getLeft().getLeftHeight() - node.getLeft().getRightHeight()) > 1) {
+                rotateRight((Node) node);
+
+            } else if ((node.getLeft().getLeftHeight() - node.getLeft().getRightHeight()) == -1) {
+                rotateLeft((Node) node.getLeft());
+                rotateRight((Node) node);
+            } else {
+                rotateRight((Node) node);
+            }
+        } else if ((node.getLeftHeight() - node.getRightHeight()) < -1) {
+            if ((node.getRight().getRightHeight() - node.getRight().getLeftHeight()) > 1) {
+                rotateLeft((Node) node);
+            } else if ((node.getRight().getRightHeight() - node.getRight().getLeftHeight()) == -1) {
+                rotateRight((Node) node.getRight());
+                rotateLeft((Node) node);
+            } else {
+                rotateLeft((Node) node);
+            }
+            updateAllHeights();
         }
     }
 
@@ -20,37 +98,37 @@ public class AVLTree implements Treeish {
      */
     @Override
     public void add(Integer value) {
-        if (value != null) {
-            Node parent = root;
-            if (parent == null) {
-                root = new Node(value);
-                return;
-            }
-            while (true) {
-                if (parent.getValue() > value) {
-                    if (parent.getLeft() == null) {
-                        parent.setLeft(new Node(value));
-                        parent.getLeft().setParent(parent);
-                        break;
-                    } else {
-                        parent = (Node) parent.getLeft();
-                    }
-
-
+        if (value == null) {
+            return;
+        }
+        if (findValue(value, getTop()) != null) {
+            return;
+        }
+        Node parent = root;
+        if (parent == null) {
+            root = new Node(value);
+            return;
+        }
+        while (true) {
+            if (parent.getValue() > value) {
+                if (parent.getLeft() == null) {
+                    parent.setLeft(new Node(value));
+                    parent.getLeft().setParent(parent);
+                    break;
                 } else {
-                    if (parent.getRight() == null) {
-                        parent.setRight(new Node(value));
-                        parent.getRight().setParent(parent);
-                        break;
-                    } else {
-                        parent = (Node) parent.getRight();
-
-                    }
+                    parent = (Node) parent.getLeft();
+                }
+            } else {
+                if (parent.getRight() == null) {
+                    parent.setRight(new Node(value));
+                    parent.getRight().setParent(parent);
+                    break;
+                } else {
+                    parent = (Node) parent.getRight();
                 }
             }
-            updateAllHeights();
-            scan();
         }
+        updateAllHeights();
     }
 
     /**
@@ -71,7 +149,7 @@ public class AVLTree implements Treeish {
                 root = null;
             } else {
                 root = toDel.getRight() == null ? null : (Node) toDel.getRight();
-                if (root!=null){
+                if (root != null) {
                     root.setParent(null);
                 }
                 toDel.setRight(null);
@@ -111,10 +189,7 @@ public class AVLTree implements Treeish {
             }
         }
         updateAllHeights();
-        scan();
-        updateAllHeights();
     }
-
 
     /**
      * @param value to check.
@@ -122,9 +197,17 @@ public class AVLTree implements Treeish {
      */
     @Override
     public boolean contains(Integer value) {
-        ValueContainer findedNode = findValue(value, root);
-
-        return findedNode != null && value == findedNode.getValue();
+        List<ValueContainer> list = asList();
+        if (list.isEmpty()) {
+            return false;
+        } else {
+            for (ValueContainer node : list) {
+                if (node.getValue().equals(value)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -154,27 +237,28 @@ public class AVLTree implements Treeish {
     public void updateAllHeights() {
         if (this.root != null) {
             getTop().updateHeights();
+            scan(getTop());
         }
-    }
-
-    public ValueContainer findValue(Integer value, ValueContainer node) {
-        if (node == null) {
-            return null;
-        }
-        if (node.getValue() == value) {
-            return node;
-        } else if (root.getValue() > value) {
-            return findValue(value, node.getLeft());
-        } else if (root.getValue() < value) {
-            return findValue(value, node.getRight());
-        }
-        return null;
     }
 
     public ValueContainer findMin(ValueContainer node) {
         if (node.getLeft() != null) {
             return findMin(node.getLeft());
         } else return node;
+    }
+
+    public ValueContainer findValue(Integer value, ValueContainer node) {
+        if (node == null) {
+            return null;
+        }
+        if (node.getValue().equals(value)) {
+            return node;
+        } else if (node.getValue() > value) {
+            return findValue(value, node.getLeft());
+        } else if (node.getValue() < value) {
+            return findValue(value, node.getRight());
+        }
+        return null;
     }
 
 
@@ -225,7 +309,6 @@ public class AVLTree implements Treeish {
             this.right = (Node) container;
         }
 
-
         /**
          * @return height of this vertex,
          * that is max of heights of left and right subtrees + 1
@@ -233,17 +316,21 @@ public class AVLTree implements Treeish {
         @Override
         public int getHeight() {
             if (left == right) {
-                return 1;
+                setHeight(1);
+                return height;
             }
             if (left == null) {
-                return right.getHeight() + 1;
+                setHeight(right.getHeight() + 1);
+                return height;
             }
             if (right == null) {
-                return left.getHeight() + 1;
+                setHeight(left.getHeight() + 1);
+                return height;
             }
-            return Math.max(left.getHeight(), right.getHeight()) + 1;
-        }
+            setHeight(Math.max(left.getHeight(), right.getHeight()) + 1);
 
+            return height;
+        }
 
         @Override
         public void setHeight(int height) {
@@ -275,120 +362,8 @@ public class AVLTree implements Treeish {
          */
         @Override
         public void updateHeights() {
-            if (getLeft() != null) {
-                left.updateHeights();
-            }
-            this.setHeight(getHeight());
-            if (getRight() != null) {
-                right.updateHeights();
-            }
+            getHeight();
         }
-
-        public void scan() {
-            if ((getLeftHeight() - getRightHeight()) > 1) {
-                if ((this.getLeft().getLeftHeight() - this.getLeft().getRightHeight()) > 1) {
-                    rotateRight(this);
-                    updateHeights();
-                } else if ((this.getLeft().getLeftHeight() - this.getLeft().getRightHeight()) == -1) {
-                    rotateLeft((Node) this.getLeft());
-                    rotateRight(this);
-                    updateHeights();
-                } else {
-                    rotateRight(this);
-                    updateHeights();
-                }
-                updateHeights();
-            } else if ((getLeftHeight() - getRightHeight()) < -1) {
-                if ((this.getRight().getRightHeight() - this.getRight().getLeftHeight()) > 1) {
-                    rotateLeft(this);
-                    updateHeights();
-                } else if ((this.getRight().getRightHeight() - this.getRight().getLeftHeight()) == -1) {
-                    rotateRight((Node) this.getRight());
-                    rotateLeft(this);
-                    updateHeights();
-                } else {
-                    rotateLeft(this);
-                    updateHeights();
-                }
-                updateHeights();
-            }
-            updateHeights();
-            if (getLeft() != null) {
-                left.scan();
-            }
-
-            if (getRight() != null) {
-                right.scan();
-            }
-        }
-
-
-        public void rotateLeft(Node A) {
-            Node B = (Node) A.getRight();
-            if (A == root) {
-                root = B;
-                B.setParent(null);
-            } else {
-                if (A.isLeft()) {
-                    A.getParent().setLeft(B);
-                    B.setParent(A.getParent());
-                } else {
-                    A.getParent().setRight(B);
-                    B.setParent(A.getParent());
-                }
-            }
-            if (B.getLeft() != null) {
-                A.setRight(B.getLeft());
-                A.getRight().setParent(A);
-            } else {
-                A.setRight(null);
-            }
-            B.setLeft(A);
-            A.setParent(B);
-        }
-
-        public void rotateRight(Node A) {
-            Node B = (Node) A.getLeft();
-            if (A == root) {
-                root = B;
-                B.setParent(null);
-            } else {
-                if (A.isLeft()) {
-                    A.getParent().setLeft(B);
-                    B.setParent(A.getParent());
-                } else {
-                    A.getParent().setRight(B);
-                    B.setParent(A.getParent());
-                }
-            }
-            if (B.getRight() != null) {
-                A.setLeft(B.getRight());
-                A.getLeft().setParent(A);
-            } else {
-                A.setLeft(null);
-            }
-            B.setRight(A);
-            A.setParent(B);
-        }
-
-//        public void bigRotate(Node p) {
-//            Node A = (Node) p.getLeft();
-//            Node q = (Node) p.getRight();
-//
-//            if (A.height - q.height == 2) {
-//                if (q.getLeftHeight() < q.getRightHeight()) {
-//                    rotateRight((Node) p.getRight());
-//                }
-//                rotateLeft(p);
-//            }
-//            if (A.height - q.height == -2) {
-//                if (q.getRightHeight() > q.getLeftHeight()) {
-//                    rotateLeft((Node) p.getLeft());
-//                }
-//                rotateRight(p);
-//            }
-//        }
-
 
         /**
          * @return if heights of left and right subtree difference is between [-1, 1]
@@ -404,8 +379,7 @@ public class AVLTree implements Treeish {
          */
         @Override
         public boolean isEmpty() {
-
-            return this.equals(null);
+            return this.getValue() == null;
         }
 
         /**
@@ -436,6 +410,5 @@ public class AVLTree implements Treeish {
             }
             return list;
         }
-
     }
 }
